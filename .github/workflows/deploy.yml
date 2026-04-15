@@ -1,0 +1,25 @@
+name: Windows PC Job
+# on: [push]
+on:
+  push:
+    branches: [ "main" ]
+jobs:
+  build:
+    runs-on: self-hosted  # 내 PC에서 실행
+    steps:
+
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          path: .
+
+      - name: Build Frontend
+        working-directory: ./frontend
+        run: |
+          npm install
+          npm run build
+
+      - name: Deploy with Docker Compose
+        run: |
+          docker compose down --remove-orphans
+          docker compose up -d
