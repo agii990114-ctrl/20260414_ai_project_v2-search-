@@ -4,7 +4,7 @@ from langchain.tools import tool
 
 @tool
 def insert_record(name: str = None, title: str = None, content: str = None):
-    """DB에 새로운 에이전트 정보를 저장합니다."""
+    """Inserts new agent information into the database."""
     sql = ""
     result = ""
     if not all([name, title, content]):
@@ -22,7 +22,7 @@ def insert_record(name: str = None, title: str = None, content: str = None):
 @tool
 def delete_records(no:int = None):
 
-    """DB에서 에이전트 정보를 삭제합니다."""
+    """Deletes agent information from the database."""
 
     sql = ""
     result = ""
@@ -41,7 +41,7 @@ def delete_records(no:int = None):
 @tool
 def update_record(no:int = None, title: str = None, content: str = None):
 
-    """DB에서 에이전트 정보를 업데이트합니다."""
+    """Updates agent information in the database."""
 
     sql = ""
     result = ""
@@ -60,8 +60,7 @@ def update_record(no:int = None, title: str = None, content: str = None):
 
 @tool
 def search_record(title: str = None):
-
-    """DB에서 에이전트 정보를 검색합니다."""
+    """Searches for agent information in the database."""
 
     result = ""
     if not title :
