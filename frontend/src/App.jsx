@@ -8,10 +8,19 @@ const App = () => {
   const [loadState, setLoadState] = useState(false);
   const [boardState, setBoardState] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
+  const [selectedItem, setSelectedItem] = useState(null);
   const itemsPerPage = 5;
 
+  const handleRowClick = (item) => {
+    setSelectedItem(item);
+  };
+
+  const closeModal = () => {
+    setSelectedItem(null);
+  };
+
   // const base_url = "aiedu.tplinkdns.com:6010/api";
-  const base_url = "192.168.0.101:8000";
+  const base_url = "localhost:8000";
 
   const convertPythonStrToJs = (str) => {
     try {
@@ -39,14 +48,13 @@ const App = () => {
         setBoards(result["search_list"]);
         setCurrentPage(1)
       }
-      
+
 
     } catch (e) {
       // console.error("파싱 실패:", e.message);
       return null;
     }
   };
-
 
 
   const send = (e) => {
@@ -139,7 +147,11 @@ const App = () => {
                 <tbody>
                   {currentItems.length > 0 ? (
                     currentItems.map((item) => (
-                      <tr key={item.no}>
+                      <tr
+                        key={item.no}
+                        onClick={() => handleRowClick(item)} // 4. 클릭 이벤트 연결
+                        style={{ cursor: 'pointer' }}       // 마우스 커서 변경
+                      >
                         <td className="text-center text-muted fw-bold">#{item.no}</td>
                         <td className="fw-semibold text-dark">{item.name}</td>
                         <td>
@@ -185,6 +197,34 @@ const App = () => {
           </aside>
         )}
       </div>
+      {/* 5. 상세 정보 팝업 (모달) */}
+      {selectedItem && (
+        <div className="modal-overlay" onClick={closeModal}>
+          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+            <div className="modal-header">
+              <h4 className="m-0">상세 정보 #{selectedItem.no}</h4>
+              <button className="btn-close-custom" onClick={closeModal}>&times;</button>
+            </div>
+            <div className="modal-body">
+              <div className="info-group">
+                <label>작성자</label>
+                <p>{selectedItem.name}</p>
+              </div>
+              <div className="info-group">
+                <label>제목</label>
+                <p className="fw-bold">{selectedItem.title}</p>
+              </div>
+              <div className="info-group">
+                <label>내용</label>
+                <div className="content-box">{selectedItem.content}</div>
+              </div>
+            </div>
+            <div className="modal-footer">
+              <button className="btn btn-secondary" onClick={closeModal}>닫기</button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
